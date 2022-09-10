@@ -1,0 +1,12 @@
+{
+  "name": "byf-custom-logger",
+  "version": "1.3.0",
+  "description": "A logger set up to work with Andrew's stuff",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["small", "logger", "backyard"],
+  "author": "Andrew Maclean",
+  "license": "ISC"
+}
