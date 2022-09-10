@@ -8,14 +8,14 @@ function Logger(name, dir = "./logs", cacheSize = 100) {
         fs.mkdirSync(dir);
     }
 
-    const timeFormatPath = new Date().toISOString().replaceAll(':', '-').split('.')[0];
+    const timeFormatPath = new Date().toISOString().replace(/:/g, '-').split('.')[0];
 
     const localPath = path.join(dir, `${timeFormatPath}-${name}.log`);
 
     const cache = [];
 
     const log = (level, message) => {
-        const dateFormat = new Date().toISOString().replace('T', '').split('.')[0];
+        const dateFormat = new Date().toISOString().replace(/T/g, '').split('.')[0];
         const output = `${dateFormat} ${name} ${level.toUpperCase()} ${message}`;
 
         console.log(dateFormat, name, `${colors[level]}${level.toUpperCase()}\x1b[0m`, message);

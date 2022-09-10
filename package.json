@@ -1,6 +1,6 @@
 {
   "name": "byf-custom-logger",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "A logger set up to work with Andrew's stuff",
   "main": "index.js",
   "scripts": {
