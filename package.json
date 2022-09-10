@@ -1,12 +1,20 @@
 {
   "name": "byf-custom-logger",
-  "version": "1.3.0",
+  "version": "1.6.0",
   "description": "A logger set up to work with Andrew's stuff",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "keywords": ["small", "logger", "backyard"],
+  "keywords": [
+    "small",
+    "logger",
+    "backyard"
+  ],
   "author": "Andrew Maclean",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": "https://github.com/amaclean2/CustomLogger",
+  "devDependencies": {
+    "jest": "^29.0.2"
+  }
 }
