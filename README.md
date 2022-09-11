@@ -5,7 +5,7 @@ I'm still trying to figure out how to write modules. I'll let you know when I ge
 So far I'm only sure it runs in Node
 To run it
 ```javascript
-  const Logger = require('byf-custom-logger);
+  const Logger = require('byf-custom-logger');
   
   const logger = new Logger(<appName>);
   
