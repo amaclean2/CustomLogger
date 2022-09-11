@@ -7,7 +7,7 @@ To run it
 ```javascript
   const Logger = require('byf-custom-logger);
   
-  const logger = Logger(<appName>);
+  const logger = new Logger(<appName>);
   
   logger.info('Hi there!');
 ```
