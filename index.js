@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const colors = require('./colors');
+const write = require('./write');
 
 function Logger(name, dir = "./logs", cacheSize = 100) {
     if (!fs.existsSync(dir)) {
@@ -17,8 +17,8 @@ function Logger(name, dir = "./logs", cacheSize = 100) {
     const log = (level, message) => {
         const dateFormat = new Date().toISOString().replace(/T/g, '').split('.')[0];
         const output = `${dateFormat} ${name} ${level.toUpperCase()} ${message}`;
-
-        console.log(dateFormat, name, `${colors[level]}${level.toUpperCase()}\x1b[0m`, message);
+        
+        write(dateFormat, name, level.toUpperCase(), message);
 
         cache.push(output);
 
