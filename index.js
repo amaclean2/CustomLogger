@@ -3,7 +3,7 @@ const path = require('path');
 
 const write = require('./write');
 
-function Logger({ name, dir = "./logs", cacheSize = 100, verbose = true }) {
+function Logger({ name, dir = "./logs", cacheSize = 100, verbose = true, storeLogs = false }) {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
     }
@@ -26,7 +26,7 @@ function Logger({ name, dir = "./logs", cacheSize = 100, verbose = true }) {
             }
         }
         
-        cache.push(output);
+        if (storeLogs) cache.push(output);
 
         if (cache.length >= cacheSize) {
             fs.appendFileSync(localPath, cache.map((log) => `${log}\n`).join(''));

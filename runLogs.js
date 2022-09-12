@@ -1,6 +1,6 @@
 const Logger = require(".");
 
-const logger = new Logger('my-app');
+const logger = new Logger({ name: 'my-app', verbose: false });
 
 logger.info([1, 2, 3])
 logger.debug([1, 2, 3, [4, 5]])
