@@ -3,7 +3,7 @@ const path = require('path');
 
 const write = require('./write');
 
-function Logger(name, dir = "./logs", cacheSize = 100) {
+function Logger(name, dir = "./logs", cacheSize = 100, verbose = true) {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
     }
@@ -17,9 +17,15 @@ function Logger(name, dir = "./logs", cacheSize = 100) {
     const log = (level, message) => {
         const dateFormat = new Date().toISOString().replace(/T/g, '').split('.')[0];
         const output = `${dateFormat} ${name} ${level.toUpperCase()} ${message}`;
-        
-        write(dateFormat, name, level.toUpperCase(), message);
 
+        if (verbose) {
+            write(dateFormat, name, level.toUpperCase(), message);
+        } else {
+            if (['error', 'fatal', 'info'].includes(level)) {
+                write(dateFormat, name, level.toUpperCase(), message);
+            }
+        }
+        
         cache.push(output);
 
         if (cache.length >= cacheSize) {
