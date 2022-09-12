@@ -3,7 +3,7 @@ const path = require('path');
 
 const write = require('./write');
 
-function Logger(name, dir = "./logs", cacheSize = 100, verbose = true) {
+function Logger({ name, dir = "./logs", cacheSize = 100, verbose = true }) {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
     }
