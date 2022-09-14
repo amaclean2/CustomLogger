@@ -125,16 +125,22 @@ const formatter = (args) => {
         }
     }
 
-    args.forEach((argument, idx) => {
-        if (typeof argument === 'object' || typeof argument === 'function') {
-            addToLine(buildLarge(argument));
+    const sortArgumentType = (argument, idx) => {
+        if (idx >= 3) {
+            argument.forEach((param) => {
+                sortArgumentType(param, 0)
+            })
+        } else if (typeof argument === 'object' || typeof argument === 'function') {
+            addToLine(buildLarge(argument))
         } else if (idx === 2) {
-            const color = colors[argument.toLowerCase()];
-            addToLine(`${color}${argument}\x1b[0m`);
+            const color = colors[argument.toLowerCase()]
+            addToLine(`${color}${argument}\x1b[0m`)
         } else {
-            addToLine(argument);
+            addToLine(argument)
         }
-    });
+    }
+
+    args.forEach(sortArgumentType);
 
     const stringifiedLine = workingLine.join(' ');
     lines.push(stringifiedLine);

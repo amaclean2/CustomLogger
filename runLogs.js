@@ -47,4 +47,6 @@ const data = {
 
 const status = 200;
 
-logger.info({ data, status });
+logger.info({ data, status })
+
+logger.request('hi', 'my', 'name', 'is', 'andrew')
