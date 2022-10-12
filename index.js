@@ -3,16 +3,19 @@ const path = require('path');
 
 const write = require('./write');
 
-function Logger({ name, dir = "./logs", cacheSize = 100, verbose = true, storeLogs = false }) {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+function Logger({ name, dir='./logs', cacheSize = 100, verbose = true, storeLogs = false }) {
+    if (storeLogs) {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+    
+        const timeFormatPath = new Date().toISOString().replace(/:/g, '-').split('.')[0];
+    
+        const localPath = path.join(dir, `${timeFormatPath}-${name}.log`);
     }
 
-    const timeFormatPath = new Date().toISOString().replace(/:/g, '-').split('.')[0];
-
-    const localPath = path.join(dir, `${timeFormatPath}-${name}.log`);
-
     const cache = [];
+    
 
     const log = (...args) => {
         const level = args[0]
