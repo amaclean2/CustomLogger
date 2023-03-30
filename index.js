@@ -1,46 +1,51 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
-const write = require('./write');
+const write = require('./write')
 
-function Logger({ name, dir='./logs', cacheSize = 100, verbose = true, storeLogs = false }) {
+function Logger({ name, dir = './logs', cacheSize = 100, verbose = false, storeLogs = false }) {
+    let localPath
     if (storeLogs) {
+        // storeLogs writes logs to an external file
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+            fs.mkdirSync(dir)
         }
     
-        const timeFormatPath = new Date().toISOString().replace(/:/g, '-').split('.')[0];
+        const timeFormatPath = new Date().toISOString().replace(/:/g, '-').split('.')[0]
     
-        const localPath = path.join(dir, `${timeFormatPath}-${name}.log`);
+        localPath = path.join(dir, `${timeFormatPath}-${name}.log`)
     }
 
-    const cache = [];
+    const cache = []
     
+    const log = (level, message) => {
 
-    const log = (...args) => {
-        const level = args[0]
-        const message = args[1]
-        const dateFormat = new Date().toISOString().replace(/T/g, '').split('.')[0];
-        const output = `${dateFormat} ${name} ${level.toUpperCase()} ${message}`;
+        // level is the type of log sent
+        // message is the body of the log sent
 
-        if (verbose) {
-            write(dateFormat, name, level.toUpperCase(), message);
+        const dateFormat = new Date().toISOString().replace(/T/g, '').split('.')[0]
+        let output
+
+        if (['error', 'fatal', 'info', 'request', 'warn', 'debug'].includes(level)) {
+            output = write({ dateFormat, name, level: level.toUpperCase(), message })
         } else {
-            if (['error', 'fatal', 'info', 'request'].includes(level)) {
-                write(dateFormat, name, level.toUpperCase(), message);
-            }
+            output = write({ message: 'supported log types are \'error\', \'fatal\', \'info\', \'warn\', \'debug\', or \'request\'.' })
         }
+        // TODO: support verbose
         
-        if (storeLogs) cache.push(output);
+        // this needs work
+        if (storeLogs) cache.push(output)
 
         if (cache.length >= cacheSize) {
-            fs.appendFileSync(localPath, cache.map((log) => `${log}\n`).join(''));
+            fs.appendFileSync(localPath, cache.map((log) => `${log}\n`).join(''))
 
-            cache = [];
+            cache = []
         }
 
-        return output;
-    };
+        // I don't think this needs to be here. I'm pretty sure this function is fine
+        // as a void function
+        return output
+    }
 
     const info = (...message) => log('info', message)
     const debug = (...message) => log('debug', message)
@@ -50,7 +55,7 @@ function Logger({ name, dir='./logs', cacheSize = 100, verbose = true, storeLogs
     const fatal = (...message) => log('fatal', message)
     const request = (...message) => log('request', message)
 
-    const close = () => fs.appendFileSync(this.path, this.cache.map((log) => `${log}\n`).join(''));
+    const close = () => fs.appendFileSync(this.path, this.cache.map((log) => `${log}\n`).join(''))
 
     return {
         info,
@@ -61,7 +66,7 @@ function Logger({ name, dir='./logs', cacheSize = 100, verbose = true, storeLogs
         fatal,
         close,
         request
-    };
-};
+    }
+}
 
-module.exports = Logger;
+module.exports = Logger
