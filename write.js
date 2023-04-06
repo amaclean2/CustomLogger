@@ -55,6 +55,12 @@ const buildObject = (argument) => {
     let tabCount = 0
     let tabsReady = false
     let isKey = false
+    let isValue = false
+
+    const testStringOtherCharacters = strArg.replace(/[\[|\]|\{|\}|\(|\)]/g, '')
+    if (!testStringOtherCharacters.length) {
+        return strArg
+    }
 
     const processStrArr = (strArray, objString) => {
         if (!strArray.length) return objString
@@ -65,18 +71,11 @@ const buildObject = (argument) => {
             case '{':
             case '[':
                 if (strArray[1] === '}' || strArray[1] === ']') {
-                    objString += `${objString.length && '\n' + writeTabs(tabCount)}${char}${strArray[1]}`
+                    const prefix = objString.length && !isValue ? '\n' + writeTabs(tabCount) : ''
+                    objString += `${prefix}${char}${strArray[1]}`
                     strArray = strArray.slice(1)
                 } else {
-                    const testStringOtherCharacters = strArray.join('').replace(/[\[|\]|\{|\}|\(|\)]/g, '')
-
-                    if (!testStringOtherCharacters.length) {
-                        objString += strArray.join('')
-                        strArray = ''
-                        break
-                    }
-
-                    objString += objString.length ? `\n${writeTabs(tabCount)}${char}` : char
+                    objString += objString.length && !isValue ? `\n${writeTabs(tabCount)}${char}` : char
                     tabCount++
                     tabsReady = true
                     isKey = true
@@ -94,6 +93,7 @@ const buildObject = (argument) => {
                 break
             case ':':
                 isKey = false
+                isValue = true
                 objString += `${char} `
                 break
             case '"':
@@ -131,7 +131,7 @@ const formatter = ({ dateFormat, name, level, message }) => {
     }
 
     addToLine(dateFormat)
-    addToLine(name)
+    addToLine(name.toString())
 
     const color = colors[level.toLowerCase()]
     addToLine(`${color}${level}\x1b[0m`)
@@ -139,8 +139,12 @@ const formatter = ({ dateFormat, name, level, message }) => {
     message.forEach((block) => {
         if (typeof block === 'object' || typeof block === 'function') {
             addToLine(buildLarge(block))
-        } else {
+        } else if (typeof block === 'string') {
             addToLine(block)
+        } else if (typeof block === 'number') {
+            addToLine(block.toString())
+        } else {
+            addToLine(`${block} is not a type that can be added to a string. Reconsider what you're logging.`)
         }
     })
 
